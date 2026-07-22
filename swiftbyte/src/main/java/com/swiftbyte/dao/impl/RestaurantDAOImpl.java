@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import com.swiftbyte.dao.RestaurantDAO;
 import com.swiftbyte.model.Restaurant;
 import com.swiftbyte.util.DBConnection;
+import java.util.ArrayList;
 
 public class RestaurantDAOImpl implements RestaurantDAO {
 	private static final String INSERT_RESTAURANT =
@@ -15,6 +16,8 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 
 		private static final String GET_RESTAURANT_BY_ID =
 		    "SELECT * FROM restaurants WHERE restaurant_id = ?";
+		private static final String GET_ALL_RESTAURANTS =
+			    "SELECT * FROM restaurants";
     public RestaurantDAOImpl() {
 
     }
@@ -87,7 +90,38 @@ public class RestaurantDAOImpl implements RestaurantDAO {
     @Override
     public List<Restaurant> getAllRestaurants() {
 
-        return null;
+    	List<Restaurant> restaurants = new ArrayList<>();
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement pstmt = con.prepareStatement(GET_ALL_RESTAURANTS);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+
+                Restaurant restaurant = new Restaurant();
+
+                restaurant.setRestaurantId(rs.getInt("restaurant_id"));
+                restaurant.setOwnerId(rs.getInt("owner_id"));
+                restaurant.setRestaurantName(rs.getString("restaurant_name"));
+                restaurant.setCuisineType(rs.getString("cuisine_type"));
+                restaurant.setAddress(rs.getString("address"));
+                restaurant.setPhoneNumber(rs.getString("phone_number"));
+                restaurant.setEmail(rs.getString("email"));
+                restaurant.setOpeningTime(rs.getTime("opening_time"));
+                restaurant.setClosingTime(rs.getTime("closing_time"));
+                restaurant.setRating(rs.getDouble("rating"));
+                restaurant.setActive(rs.getBoolean("is_active"));
+                restaurant.setCreatedAt(rs.getTimestamp("created_at"));
+                restaurant.setUpdatedAt(rs.getTimestamp("updated_at"));
+
+                restaurants.add(restaurant);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return restaurants;
     }
 
     @Override
