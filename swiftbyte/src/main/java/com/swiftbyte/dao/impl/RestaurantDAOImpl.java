@@ -4,51 +4,84 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
-
+import java.sql.ResultSet;
 import com.swiftbyte.dao.RestaurantDAO;
 import com.swiftbyte.model.Restaurant;
 import com.swiftbyte.util.DBConnection;
 
 public class RestaurantDAOImpl implements RestaurantDAO {
+	private static final String INSERT_RESTAURANT =
+		    "INSERT INTO restaurants(owner_id, restaurant_name, cuisine_type, address, phone_number, email, opening_time, closing_time, rating, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+		private static final String GET_RESTAURANT_BY_ID =
+		    "SELECT * FROM restaurants WHERE restaurant_id = ?";
     public RestaurantDAOImpl() {
 
     }
 
     @Override
     public boolean addRestaurant(Restaurant restaurant) {
+    	    try (Connection con = DBConnection.getConnection();
+    	         PreparedStatement pstmt = con.prepareStatement(INSERT_RESTAURANT)) {
 
-        String query = "INSERT INTO restaurants(owner_id, restaurant_name, cuisine_type, address, phone_number, email, opening_time, closing_time, rating, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    	        pstmt.setInt(1, restaurant.getOwnerId());
+    	        pstmt.setString(2, restaurant.getRestaurantName());
+    	        pstmt.setString(3, restaurant.getCuisineType());
+    	        pstmt.setString(4, restaurant.getAddress());
+    	        pstmt.setString(5, restaurant.getPhoneNumber());
+    	        pstmt.setString(6, restaurant.getEmail());
+    	        pstmt.setTime(7, restaurant.getOpeningTime());
+    	        pstmt.setTime(8, restaurant.getClosingTime());
+    	        pstmt.setDouble(9, restaurant.getRating());
+    	        pstmt.setBoolean(10, restaurant.isActive());
 
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement pstmt = con.prepareStatement(query)) {
+    	        int rowsAffected = pstmt.executeUpdate();
 
-            pstmt.setInt(1, restaurant.getOwnerId());
-            pstmt.setString(2, restaurant.getRestaurantName());
-            pstmt.setString(3, restaurant.getCuisineType());
-            pstmt.setString(4, restaurant.getAddress());
-            pstmt.setString(5, restaurant.getPhoneNumber());
-            pstmt.setString(6, restaurant.getEmail());
-            pstmt.setTime(7, restaurant.getOpeningTime());
-            pstmt.setTime(8, restaurant.getClosingTime());
-            pstmt.setDouble(9, restaurant.getRating());
-            pstmt.setBoolean(10, restaurant.isActive());
+    	        return rowsAffected > 0;
 
-            int rowsAffected = pstmt.executeUpdate();
+    	    } catch (SQLException e) {
+    	        e.printStackTrace();
+    	    }
 
-            return rowsAffected > 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
+    	    return false;
+    	}
 
     @Override
     public Restaurant getRestaurantById(int restaurantId) {
+    	 Restaurant restaurant = null;
 
-        return null;
+    	    try (Connection con = DBConnection.getConnection();
+    	         PreparedStatement pstmt = con.prepareStatement(GET_RESTAURANT_BY_ID)) {
+
+    	        pstmt.setInt(1, restaurantId);
+
+    	        ResultSet rs = pstmt.executeQuery();
+
+    	        if (rs.next()) {
+
+    	            restaurant = new Restaurant();
+
+    	            restaurant.setRestaurantId(rs.getInt("restaurant_id"));
+    	            restaurant.setOwnerId(rs.getInt("owner_id"));
+    	            restaurant.setRestaurantName(rs.getString("restaurant_name"));
+    	            restaurant.setCuisineType(rs.getString("cuisine_type"));
+    	            restaurant.setAddress(rs.getString("address"));
+    	            restaurant.setPhoneNumber(rs.getString("phone_number"));
+    	            restaurant.setEmail(rs.getString("email"));
+    	            restaurant.setOpeningTime(rs.getTime("opening_time"));
+    	            restaurant.setClosingTime(rs.getTime("closing_time"));
+    	            restaurant.setRating(rs.getDouble("rating"));
+    	            restaurant.setActive(rs.getBoolean("is_active"));
+    	            restaurant.setCreatedAt(rs.getTimestamp("created_at"));
+    	            restaurant.setUpdatedAt(rs.getTimestamp("updated_at"));
+    	        }
+
+    	    } catch (SQLException e) {
+    	        e.printStackTrace();
+    	    }
+
+    	    return restaurant;
+        
     }
 
     @Override
