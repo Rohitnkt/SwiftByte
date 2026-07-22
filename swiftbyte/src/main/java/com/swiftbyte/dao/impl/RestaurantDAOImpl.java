@@ -13,13 +13,15 @@ import java.util.ArrayList;
 public class RestaurantDAOImpl implements RestaurantDAO {
 	private static final String INSERT_RESTAURANT =
 		    "INSERT INTO restaurants(owner_id, restaurant_name, cuisine_type, address, phone_number, email, opening_time, closing_time, rating, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+    
 		private static final String GET_RESTAURANT_BY_ID =
 		    "SELECT * FROM restaurants WHERE restaurant_id = ?";
 		private static final String GET_ALL_RESTAURANTS =
 			    "SELECT * FROM restaurants";
 		private static final String UPDATE_RESTAURANT =
 			    "UPDATE restaurants SET restaurant_name=?, cuisine_type=?, address=?, phone_number=?, email=?, opening_time=?, closing_time=?, rating=?, is_active=? WHERE restaurant_id=?";
+		private static final String DELETE_RESTAURANT =
+			    "DELETE FROM restaurants WHERE restaurant_id = ?";
     public RestaurantDAOImpl() {
 
     }
@@ -156,6 +158,20 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 
     @Override
     public boolean deleteRestaurant(int restaurantId) {
+
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement pstmt = con.prepareStatement(DELETE_RESTAURANT)) {
+
+            pstmt.setInt(1, restaurantId);
+
+            int rowsAffected = pstmt.executeUpdate();
+
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return false;
     }
