@@ -18,6 +18,8 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 		    "SELECT * FROM restaurants WHERE restaurant_id = ?";
 		private static final String GET_ALL_RESTAURANTS =
 			    "SELECT * FROM restaurants";
+		private static final String UPDATE_RESTAURANT =
+			    "UPDATE restaurants SET restaurant_name=?, cuisine_type=?, address=?, phone_number=?, email=?, opening_time=?, closing_time=?, rating=?, is_active=? WHERE restaurant_id=?";
     public RestaurantDAOImpl() {
 
     }
@@ -127,7 +129,29 @@ public class RestaurantDAOImpl implements RestaurantDAO {
     @Override
     public boolean updateRestaurant(Restaurant restaurant) {
 
-        return false;
+    	try (Connection con = DBConnection.getConnection();
+    	         PreparedStatement pstmt = con.prepareStatement(UPDATE_RESTAURANT)) {
+
+    	        pstmt.setString(1, restaurant.getRestaurantName());
+    	        pstmt.setString(2, restaurant.getCuisineType());
+    	        pstmt.setString(3, restaurant.getAddress());
+    	        pstmt.setString(4, restaurant.getPhoneNumber());
+    	        pstmt.setString(5, restaurant.getEmail());
+    	        pstmt.setTime(6, restaurant.getOpeningTime());
+    	        pstmt.setTime(7, restaurant.getClosingTime());
+    	        pstmt.setDouble(8, restaurant.getRating());
+    	        pstmt.setBoolean(9, restaurant.isActive());
+    	        pstmt.setInt(10, restaurant.getRestaurantId());
+
+    	        int rowsAffected = pstmt.executeUpdate();
+
+    	        return rowsAffected > 0;
+
+    	    } catch (SQLException e) {
+    	        e.printStackTrace();
+    	    }
+
+    	    return false;
     }
 
     @Override
