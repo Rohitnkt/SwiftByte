@@ -18,6 +18,16 @@ public class CartDAOImpl implements CartDAO {
             "SELECT * FROM cart WHERE user_id = ?";
     private static final String GET_CART_BY_USER_AND_MENU =
     	    "SELECT * FROM cart WHERE user_id = ? AND menu_id = ?";
+    private static final String UPDATE_CART =
+    	    "UPDATE cart SET quantity = ?, unit_price = ?, total_price = ? WHERE cart_id = ?";
+    private static final String DELETE_CART =
+            "DELETE FROM cart WHERE cart_id = ?";
+    private static final String CLEAR_CART =
+            "DELETE FROM cart WHERE user_id = ?";
+    private static final String HAS_CART_ITEMS =
+            "SELECT COUNT(*) FROM cart WHERE user_id = ?";
+    private static final String GET_RESTAURANT_ID_IN_CART =
+            "SELECT restaurant_id FROM cart WHERE user_id = ? LIMIT 1";
     @Override
     public boolean addToCart(Cart cart) {
 
@@ -144,26 +154,92 @@ public class CartDAOImpl implements CartDAO {
 
     @Override
     public boolean updateCartItem(Cart cart) {
-        return false;
+    	try (Connection con = DBConnection.getConnection();
+    	         PreparedStatement pstmt = con.prepareStatement(UPDATE_CART)) {
+
+    	        pstmt.setInt(1, cart.getQuantity());
+    	        pstmt.setDouble(2, cart.getUnitPrice());
+    	        pstmt.setDouble(3, cart.getTotalPrice());
+    	        pstmt.setInt(4, cart.getCartId());
+
+    	        return pstmt.executeUpdate() > 0;
+
+    	    } catch (SQLException e) {
+    	        e.printStackTrace();
+    	    }
+
+    	    return false;
     }
 
     @Override
     public boolean removeCartItem(int cartId) {
-        return false;
+    	 try (Connection con = DBConnection.getConnection();
+    	         PreparedStatement pstmt = con.prepareStatement(DELETE_CART)) {
+
+    	        pstmt.setInt(1, cartId);
+
+    	        return pstmt.executeUpdate() > 0;
+
+    	    } catch (SQLException e) {
+    	        e.printStackTrace();
+    	    }
+
+    	    return false;
     }
 
     @Override
     public boolean clearCart(int userId) {
-        return false;
+    	try (Connection con = DBConnection.getConnection();
+    	         PreparedStatement pstmt = con.prepareStatement(CLEAR_CART)) {
+
+    	        pstmt.setInt(1, userId);
+
+    	        return pstmt.executeUpdate() > 0;
+
+    	    } catch (SQLException e) {
+    	        e.printStackTrace();
+    	    }
+
+    	    return false;
     }
 
     @Override
     public boolean hasCartItems(int userId) {
-        return false;
+    	try (Connection con = DBConnection.getConnection();
+    	         PreparedStatement pstmt = con.prepareStatement(HAS_CART_ITEMS)) {
+
+    	        pstmt.setInt(1, userId);
+
+    	        ResultSet rs = pstmt.executeQuery();
+
+    	        if (rs.next()) {
+    	            return rs.getInt(1) > 0;
+    	        }
+
+    	    } catch (SQLException e) {
+    	        e.printStackTrace();
+    	    }
+
+    	    return false;
     }
 
     @Override
     public Integer getRestaurantIdInCart(int userId) {
-        return null;
+    	try (Connection con = DBConnection.getConnection();
+    	         PreparedStatement pstmt = con.prepareStatement(GET_RESTAURANT_ID_IN_CART)) {
+
+    	        pstmt.setInt(1, userId);
+
+    	        ResultSet rs = pstmt.executeQuery();
+
+    	        if (rs.next()) {
+    	            return rs.getInt("restaurant_id");
+    	        }
+
+    	    } catch (SQLException e) {
+    	        e.printStackTrace();
+    	    }
+
+    	    return null;
     }
 }

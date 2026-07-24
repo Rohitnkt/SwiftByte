@@ -16,6 +16,12 @@ public class Restaurant {
     private Time closingTime;
     private double rating;
     private boolean isActive;
+    private String imageUrl;
+    private int deliveryTimeMin;
+    private int deliveryTimeMax;
+    private String promoOffer;
+    private String location;
+    private boolean topChain;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
@@ -141,5 +147,63 @@ public class Restaurant {
 
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public int getDeliveryTimeMin() {
+        return deliveryTimeMin;
+    }
+
+    public void setDeliveryTimeMin(int deliveryTimeMin) {
+        this.deliveryTimeMin = deliveryTimeMin;
+    }
+
+    public int getDeliveryTimeMax() {
+        return deliveryTimeMax;
+    }
+
+    public void setDeliveryTimeMax(int deliveryTimeMax) {
+        this.deliveryTimeMax = deliveryTimeMax;
+    }
+
+    public String getPromoOffer() {
+        return promoOffer;
+    }
+
+    public void setPromoOffer(String promoOffer) {
+        this.promoOffer = promoOffer;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public boolean isTopChain() {
+        return topChain;
+    }
+
+    public void setTopChain(boolean topChain) {
+        this.topChain = topChain;
+    }
+
+    public String getDeliveryTimeLabel() {
+        if (deliveryTimeMin > 0 && deliveryTimeMax > 0) {
+            return deliveryTimeMin + "-" + deliveryTimeMax + " mins";
+        }
+        if (deliveryTimeMin > 0) {
+            return deliveryTimeMin + " mins";
+        }
+        return "25-35 mins";
     }
 }

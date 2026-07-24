@@ -11,6 +11,14 @@ public interface RestaurantDAO {
 
     List<Restaurant> getAllRestaurants();
 
+    List<Restaurant> getActiveRestaurants();
+
+    List<Restaurant> getTopRestaurantChains(int limit);
+
+    List<Restaurant> searchRestaurants(String query);
+
+    List<Restaurant> getRestaurantsByCuisine(String cuisineType);
+
     boolean updateRestaurant(Restaurant restaurant);
 
     boolean deleteRestaurant(int restaurantId);
