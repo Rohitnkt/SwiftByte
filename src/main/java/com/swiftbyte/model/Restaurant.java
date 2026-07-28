@@ -31,7 +31,7 @@ public class Restaurant {
     public Restaurant(int ownerId, String restaurantName, String cuisineType,
                       String address, String phoneNumber, String email,
                       Time openingTime, Time closingTime,
-                      double rating, boolean isActive) {
+                      double rating, boolean isActive,String imagePath) {
 
         this.ownerId = ownerId;
         this.restaurantName = restaurantName;
