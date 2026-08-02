@@ -6,3 +6,4 @@ target/
 .idea/
 *.log
 .env
+src/main/webapp/WEB-INF/lib/
