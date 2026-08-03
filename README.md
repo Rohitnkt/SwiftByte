@@ -2,6 +2,14 @@
 
 > **SwiftByte — Engineered for hunger. Built for scale.**
 
+### Live Demo
+
+[🌐 View SwiftByte Live](https://swiftbyte-50ya.onrender.com)
+
+SwiftByte is a full-stack food delivery web application built using **Java, JSP, Jakarta Servlets, JDBC, MySQL, HTML5, CSS3, and JavaScript**.
+
+It provides an end-to-end food ordering workflow where users can register and authenticate, discover restaurants, explore menus, manage a persistent cart, and place orders through a responsive web interface.
+
 SwiftByte is a full-stack food delivery web application built using **Java, JSP, Jakarta Servlets, JDBC, MySQL, HTML5, CSS3, and JavaScript**.
 
 It provides an end-to-end food ordering workflow where users can register and authenticate, discover restaurants, explore menus, manage a persistent cart, and place orders through a responsive web interface.
@@ -222,15 +230,15 @@ The database schema is normalized to reduce unnecessary data duplication and mai
 
 ## Core Tables
 
-| Table | Purpose |
-|---|---|
-| `users` | Stores customer accounts and hashed credentials |
+| Table         | Purpose                                                           |
+| ------------- | ----------------------------------------------------------------- |
+| `users`       | Stores customer accounts and hashed credentials                   |
 | `restaurants` | Stores restaurant profiles, operational information, and location |
-| `menu_items` | Stores restaurant-specific menu items and pricing |
-| `cart` | Stores persistent customer cart information |
-| `cart_items` | Stores individual items associated with a cart |
-| `orders` | Stores order-level information |
-| `order_items` | Stores individual items belonging to an order |
+| `menu_items`  | Stores restaurant-specific menu items and pricing                 |
+| `cart`        | Stores persistent customer cart information                       |
+| `cart_items`  | Stores individual items associated with a cart                    |
+| `orders`      | Stores order-level information                                    |
+| `order_items` | Stores individual items belonging to an order                     |
 
 ## Entity Relationships
 
@@ -270,7 +278,6 @@ SwiftByte implements security and validation controls across multiple layers of 
 - Passwords are transformed using SHA-256 hashing before database storage
 - Plain-text passwords are not stored directly in the database
 - Migration to adaptive password-hashing algorithms such as **BCrypt** or **Argon2** is planned as a future security improvement
-
 
 ---
 
@@ -356,6 +363,7 @@ User Registration / Login
 This interconnected workflow differentiates SwiftByte from applications where create, read, update, and delete operations exist only as isolated screens.
 
 ---
+
 # 📁 Project Structure
 
 ```text
@@ -385,7 +393,6 @@ SwiftByte/
 └── README.md
 ```
 
-
 # 📸 Screenshots
 
 Application screenshots demonstrate the complete user workflow.
@@ -411,6 +418,7 @@ Application screenshots demonstrate the complete user workflow.
 ## 🛒 Shopping Cart
 
 ![SwiftByte Cart](screenshots/cart.png)
+
 ## 🛒 Checkout
 
 ![SwiftByte Cart](screenshots/checkout.png)
